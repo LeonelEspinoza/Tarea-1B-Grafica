@@ -134,10 +134,10 @@ def createTextureQuad(nx, ny):
     # Defining locations and texture coordinates for each vertex of the shape    
     vertices = [
     #   positions        texture
-        -0.5, -0.5, 0.0,  0, ny,
-         0.5, -0.5, 0.0, nx, ny,
-         0.5,  0.5, 0.0, nx, 0,
-        -0.5,  0.5, 0.0,  0, 0]
+        -1, -1, 0.0, nx, 0,    #EDIT intercambio
+         1, -1, 0.0, nx, ny,
+         1,  1, 0.0, 0,  ny,   #EDIT intercambio
+        -1,  1, 0.0, 0,  0]
 
     # Defining connections among vertices
     # We have a triangle every 3 indices specified
