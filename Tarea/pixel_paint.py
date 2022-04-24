@@ -11,11 +11,11 @@ from Modelo_Grid import *
 
 if __name__ == '__main__':
             
-    W=32                #cantidad columnas canvas
-    H=32                #cantidad filas canvas
-    S=15              #tamaño celda
+    W=16               #cantidad columnas canvas
+    H=16                #cantidad filas canvas
+    S=35              #tamaño celda
     
-    width = W*S + 80  #Ancho pantalla= canvas + barra
+    width = W*S+200  #Ancho pantalla= canvas + barra
     height = H*S       #alto pantalla
     
     canvasSize = (W*S,H*S)  #Medidas Canvas
@@ -62,18 +62,22 @@ if __name__ == '__main__':
         glfw.poll_events()       
         #Clearing the screen in both, color and depth
         glClear(GL_COLOR_BUFFER_BIT)
-        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL)
         
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL)
         #TODO FUNCIONA EXEPTO DIBUJAR buttons y Grid A LA VEZ, SOLO AHI EXPLOTA AAAAAAAAAAAAAAA
-
+        Grid.draw()
+        glUseProgram(Colorpipeline.shaderProgram)
         buttons.draw(Colorpipeline)
-        #Grid.draw() 
+        
+         
 
         
 
         glfw.swap_buffers(window)
 
     glfw.terminate()
+
+
 
 
 
