@@ -1,2 +1,2 @@
-# Tarea 1B Grafica
- Repositorio de Tarea 1B grafica
+# Tarea 1C Grafica
+ Repositorio de Tarea 1C grafica
