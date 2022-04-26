@@ -39,8 +39,10 @@ def toGPUShape(shape):
     return gpuShape
 
 class Grid(object):
-    def __init__(self,pipeline,Colorpipeline,N,imgData) -> None:
-        self.gpugrid = toGPUShape(bs.createGrid(N,N))               #CREO UNA GRILLA
+    def __init__(self,pipeline,Colorpipeline,W,H,imgData) -> None:
+        self.W = W
+        self.H = H
+        self.gpugrid = toGPUShape(bs.createGrid(W,H))               #CREO UNA GRILLA
         self.gpuShape = toGPUShape(bs.createTextureQuad(1,1))        #CREO UN CUADRADO DE TEXTURA 
         self.imgData = imgData
         self.Colorpipeline = Colorpipeline
@@ -57,9 +59,26 @@ class Grid(object):
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST)
         internalFormat = GL_RGB
         format = GL_RGB
-        glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, N, N, 0, format, GL_UNSIGNED_BYTE, self.imgData)
+        glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, W, H, 0, format, GL_UNSIGNED_BYTE, self.imgData)
         #TERMINE DE TEXTURIZAR EL CUADRADO
-        
+    
+    def change_ImgData(self,x, y, rgb):
+        self.imgData[ x , y ] = rgb
+
+        #RETEXTURIZO EL CUADRADO
+        self.gpuShape.texture = glGenTextures(1)                                     
+        glBindTexture(GL_TEXTURE_2D, self.gpuShape.texture)
+        # texture wrapping params
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE)
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE)
+        # texture filtering params
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST)
+        internalFormat = GL_RGB
+        format = GL_RGB
+        glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, self.W, self.H, 0, format, GL_UNSIGNED_BYTE, self.imgData)
+        #TERMINE DE TEXTURIZAR EL CUADRADO
+
 
     def draw(self):
         glUseProgram(self.pipeline.shaderProgram)           #usa el simple texture shader program
