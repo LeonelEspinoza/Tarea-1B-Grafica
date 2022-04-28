@@ -1,8 +1,8 @@
 
-
 import numpy as np
 import glfw
 import sys
+import json  
 from OpenGL.GL import *
 
 import grafica.easy_shaders as es
@@ -11,30 +11,53 @@ from Modelo_Grid import *
 from Controlador import *
 
 if __name__ == '__main__':
-            
-    W=16                #cantidad columnas canvas
-    H=16                #cantidad filas canvas
-    S=35                #escala celda
+    #ejemplo de llamada: python pixel_paint.py 16 pallete.json boo.png
+    #python pixel_paint.py[0] 16[1] pallete.json[2] boo.png[3]
+    archivo_json = sys.argv[2]
+    nombre_archivo = sys.argv[3]
+    W=int(sys.argv[1])              #cantidad columnas canvas
+    H=W                             #cantidad filas canvas
+    S=32                            #escala celda
     
-    width = W*S         #Ancho pantalla  ##+ barra
-    height = H*S        #alto pantalla
-    transparent = [0.5,0.5,0.5]
+    if W>16:
+        S=24
+
+    width = W*S                     #Ancho pantalla  ##+ barra
+    height = H*S                    #alto pantalla
 
     #Matriz
-    imgData = np.zeros((W, H, 3), dtype=np.uint8)          
+    imgData = np.zeros((W, H, 4), dtype=np.uint8)          
     
-    #Pintar fondo
-    imgData[:, :] = np.array([255*0.5, 255*0.5, 255*0.5], dtype=np.uint8)
-    
-    #colores JSON
-    imgData[W-1, 0] = [255*1,255*1,255*1]
-    imgData[W-1, 1] = [255*1,255*0.8,255*0.8]
-    imgData[W-1, 2] = [255*0,255*0,255*0]
-    imgData[W-1, 3] = [255*1,255*1,255*1]
-    imgData.reshape((imgData.shape[0]*imgData.shape[1],3))
+    transparent = None
+    pallete = None
+
+    with open(archivo_json) as json_file:
+        data = json.load(json_file)
+
+        transparent = data["transparent"]
+        pallete = data["pallete"]
+        
+        assert len(pallete) <= W
+        
+        #Pintar fondo
+        if type(transparent[0])==float:
+            imgData[:, :] = np.array([255*transparent[0], 255*transparent[1], 255*transparent[2], 0], dtype=np.uint8)
+        else:
+            imgData[:, :] = np.array([transparent[0], transparent[1], transparent[2], 0], dtype=np.uint8)
+        
+        #colores JSON
+        for index, color in enumerate(pallete):
+            #print(f'El color {index} de la paleta es: {color}')
+            if type(color[0])==float:
+                imgData[W-1,index] = [255*color[0],255*color[1],255*color[2], 100]
+            else:
+                imgData[W-1,index] = [color[0],color[1],color[2], 100]
+
+        imgData.reshape((imgData.shape[0]*imgData.shape[1],4))
     
     #controlador 
-    controlador = Controller(S,transparent,imgData)
+    controlador = Controller(S,transparent,imgData,nombre_archivo)
+
     # Initialize glfw
     if not glfw.init():
         sys.exit()

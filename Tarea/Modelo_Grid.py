@@ -57,8 +57,8 @@ class Grid(object):
         # texture filtering params
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST)
-        internalFormat = GL_RGB
-        format = GL_RGB
+        internalFormat = GL_RGBA
+        format = GL_RGBA
         glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, W, H, 0, format, GL_UNSIGNED_BYTE, self.imgData)
         #TERMINE DE TEXTURIZAR EL CUADRADO
     
@@ -74,8 +74,8 @@ class Grid(object):
         # texture filtering params
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST)
-        internalFormat = GL_RGB
-        format = GL_RGB
+        internalFormat = GL_RGBA
+        format = GL_RGBA
         glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, self.W, self.H, 0, format, GL_UNSIGNED_BYTE, self.imgData)
         #TERMINE DE TEXTURIZAR EL CUADRADO
 

@@ -1,5 +1,8 @@
+
 from Modelo_Grid import Grid
 
+import PIL
+from PIL import ImageOps
 import glfw 
 import sys
 from OpenGL.GL import *
@@ -7,13 +10,15 @@ import numpy as np
 
 class Controller(object):
 
-    def __init__(self, S, paint, ImgData):
+    def __init__(self, S, paint, ImgData,nombre_archivo):
        self.leftClickOn = False     #está apretado el click izq
        self.rightClickOn = False    #está apretado el click der
        self.mousePos = (0.0 , 0.0)  #posicion del mouse 
-       self.paint = paint     #pintura en pincel
        self.imgData = ImgData
+       self.paint = self.imgData[0,0]           #pintura en pincel
        self.S = S
+       self.nombre_archivo = nombre_archivo
+
     def setGrid(self,grid):
         self.grid = grid
 
@@ -26,6 +31,12 @@ class Controller(object):
         if key == glfw.KEY_ESCAPE:
             glfw.set_window_should_close(window, True)
 
+        if key == glfw.KEY_S or key == glfw.KEY_G:
+            im= PIL.Image.fromarray(self.imgData)
+            im= im.rotate(-90)
+            im= PIL.ImageOps.mirror(im)
+            im.save(self.nombre_archivo)
+        
         else:
             print ('Unknown key')
 
@@ -45,13 +56,13 @@ class Controller(object):
             if (button == glfw.MOUSE_BUTTON_2):
                 self.leftClickOn = True
                 self.paint = self.imgData[ int(glfw.get_cursor_pos(window)[0]/self.S) , int(glfw.get_cursor_pos(window)[1]/self.S) ]
-                print("Mouse click - button 1", glfw.get_cursor_pos(window)[0])
+                #print("Mouse click - button 2", glfw.get_cursor_pos(window)[0])
                 
 
             elif (button == glfw.MOUSE_BUTTON_1):
                 self.rightClickOn = True
                 self.grid.change_ImgData( int(glfw.get_cursor_pos(window)[0]/self.S) , int(glfw.get_cursor_pos(window)[1]/self.S) , self.paint )
-                print("Mouse click - button 2:", glfw.get_cursor_pos(window)[1])
+                #print("Mouse click - button 1:", glfw.get_cursor_pos(window)[1])
 
 
         elif (action ==glfw.RELEASE):
