@@ -8,6 +8,16 @@ import sys
 from OpenGL.GL import *
 import numpy as np
 
+def Expandir_matriz(M0):
+    M1= np.zeros((M0.shape[0]*2,M0.shape[1]*2,M0.shape[2]),dtype=np.uint8)
+    for i in range(M0.shape[0]):
+        for j in range(M0.shape[1]):
+            M1[2*i,2*j]=M0[i,j]
+            M1[2*i+1,2*j]=M0[i,j]
+            M1[2*i,2*j+1]=M0[i,j]
+            M1[2*i+1,2*j+1]=M0[i,j]
+    return M1
+
 class Controller(object):
 
     def __init__(self, S, paint, ImgData,nombre_archivo):
@@ -28,15 +38,30 @@ class Controller(object):
         if not (action == glfw.PRESS or action == glfw.RELEASE):
             return
         
-        if key == glfw.KEY_ESCAPE:
+        elif key == glfw.KEY_ESCAPE:
             glfw.set_window_should_close(window, True)
 
-        if key == glfw.KEY_S or key == glfw.KEY_G:
+        elif key == glfw.KEY_S or key == glfw.KEY_G:
             im= PIL.Image.fromarray(self.imgData)
             im= im.rotate(-90)
             im= PIL.ImageOps.mirror(im)
             im.save(self.nombre_archivo)
         
+        elif key == glfw.KEY_E:
+            newImDa = Expandir_matriz(self.imgData)
+            im= PIL.Image.fromarray(newImDa)
+            im= im.rotate(-90)
+            im= PIL.ImageOps.mirror(im)
+            im.save(self.nombre_archivo)
+
+        #FUNCION EXPERIMENTAL (expande la imagen mas de una vez PERO PUEDE HACER CRASH ademas dejas de poder editar una vez hecho)
+    #    elif key == glfw.KEY_Ñ:
+    #        self.imgData = Expandir_matriz(self.imgData)
+    #        im= PIL.Image.fromarray(self.imgData)
+    #        im= im.rotate(-90)
+    #        im= PIL.ImageOps.mirror(im)
+    #        im.save(self.nombre_archivo)
+
         else:
             print ('Unknown key')
 
