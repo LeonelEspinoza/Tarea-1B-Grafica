@@ -40,18 +40,13 @@ if __name__ == '__main__':
         assert len(pallete) <= W
         
         #Pintar fondo
-        if type(transparent[0])==float:
-            imgData[:, :] = np.array([255*transparent[0], 255*transparent[1], 255*transparent[2], 0], dtype=np.uint8)
-        else:
-            imgData[:, :] = np.array([transparent[0], transparent[1], transparent[2], 0], dtype=np.uint8)
+        imgData[:, :] = np.array([255*transparent[0], 255*transparent[1], 255*transparent[2], 0], dtype=np.uint8)
         
         #colores JSON
         for index, color in enumerate(pallete):
             #print(f'El color {index} de la paleta es: {color}')
-            if type(color[0])==float:
-                imgData[W-1,index] = [255*color[0],255*color[1],255*color[2], 100]
-            else:
-                imgData[W-1,index] = [color[0],color[1],color[2], 100]
+            imgData[W-1,index] = [255*color[0],255*color[1],255*color[2], 255]
+            
 
         imgData.reshape((imgData.shape[0]*imgData.shape[1],4))
     
